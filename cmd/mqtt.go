@@ -19,8 +19,8 @@ package cmd
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/buxtronix/phev2mqtt/client"
-	"github.com/buxtronix/phev2mqtt/protocol"
+	"github.com/gmta/phev2mqtt/client"
+	"github.com/gmta/phev2mqtt/protocol"
 	"github.com/spf13/cobra"
 	"os/exec"
 	"strings"
@@ -416,6 +416,7 @@ func (m *mqttClient) publishRegister(msg *protocol.PhevMessage) {
 		m.publish("/door/boot", boolOpen[reg.Boot])
 		m.publish("/lights/head", boolOnOff[reg.Headlights])
 	case *protocol.RegisterBatteryLevel:
+        log.Infof("RegisterBatteryLevel: level=%d parking=%t", reg.Level, reg.ParkingLights)
 		m.publish("/battery/level", fmt.Sprintf("%d", reg.Level))
 		m.publish("/lights/parking", boolOnOff[reg.ParkingLights])
 	case *protocol.RegisterChargePlug:

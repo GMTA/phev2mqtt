@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/buxtronix/phev2mqtt/protocol"
+	"github.com/gmta/phev2mqtt/protocol"
 )
 
 const DefaultAddress = "192.168.8.46:8080"
@@ -220,13 +220,13 @@ func (c *Client) nextRecvMsg(deadline time.Time) (*protocol.PhevMessage, error) 
 // Sends periodic pings to the car.
 func (c *Client) pinger() {
 	pingSeq := byte(0xa)
-	ticker := time.NewTicker(200 * time.Millisecond)
+	ticker := time.NewTicker(500 * time.Millisecond)
 	defer ticker.Stop()
 	for t := range ticker.C {
 		switch {
 		case c.closed:
 			return
-		case t.Sub(c.lastRx) < 500*time.Millisecond:
+		case t.Sub(c.lastRx) < 1000*time.Millisecond:
 			continue
 		}
 		c.Send <- &protocol.PhevMessage{
